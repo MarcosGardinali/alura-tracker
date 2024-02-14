@@ -1,22 +1,14 @@
 <script lang="ts">
 import BarraLateral from './components/BarraLateral.vue';
-import Box from './components/Box.vue';
-import Formulario from './components/Formulario.vue';
-import Tarefa from './components/Tarefa.vue';
-import type ITarefa from './interfaces/ITarefa';
 
 export default {
-  components: { BarraLateral, Formulario, Tarefa, Box },
+  components: { BarraLateral },
   data() {
     return {
-      tarefas: [] as ITarefa[],
       modoEscuroAtivo: false
     }
   },
   methods: {
-    salvarTarefa(tarefa: ITarefa) {
-      this.tarefas.push(tarefa)
-    },
     trocarTema(modoEscuroAtivo : boolean){
       this.modoEscuroAtivo = modoEscuroAtivo
     }
@@ -31,13 +23,9 @@ export default {
       <BarraLateral @ao-tema-alterado="trocarTema"/>
     </div>
     <div class="column is-three-quarter conteudo">
-      <Formulario @ao-salvar-formulario="salvarTarefa" />
-      <div class="lista">
-        <Tarefa v-for="(tarefa, index) in tarefas" :key="index" :tarefa="tarefa" />
-        <Box v-if="tarefas.length === 0">
-          Nenhuma tarefa realizada!
-        </Box>
-      </div>
+      <RouterView>
+        
+      </RouterView>
     </div>
   </main>
 </template>

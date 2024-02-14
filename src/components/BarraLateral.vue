@@ -1,23 +1,25 @@
 <script lang="ts">
+import { RouterLink } from 'vue-router'
+
 export default {
     name: 'BarraLateral',
     methods: {
-        alterarTema(){
+        alterarTema() {
             this.modoEscuroAtivo = !this.modoEscuroAtivo
             this.$emit('aoTemaAlterado', this.modoEscuroAtivo)
         }
     },
     emits: ['aoTemaAlterado'],
-    data(){
-        return{
+    data() {
+        return {
             modoEscuroAtivo: false
         }
     },
     computed: {
-        textoBotao(){
-            if(this.modoEscuroAtivo){
+        textoBotao() {
+            if (this.modoEscuroAtivo) {
                 return 'Desativar Modo Escuro'
-            }return 'Ativar Modo Escuro'
+            } return 'Ativar Modo Escuro'
         }
     }
 }
@@ -31,6 +33,23 @@ export default {
         <button class="button" @click="alterarTema">
             {{ textoBotao }}
         </button>
+        <nav class="panel mt-5">
+            <ul>
+                <router-link to="/" class="link">
+                    <li>
+                        <i class="fas fa-tasks"></i>
+                        Tarefas
+                    </li>
+                </router-link>
+                <router-link to="/projetos" class="link">
+                    <li>
+                        <i class="fas fa-project-diagram"></i>
+                        Projetos
+                    </li>
+                </router-link>
+
+            </ul>
+        </nav>
     </header>
 </template>
 
@@ -49,4 +68,21 @@ header {
         height: auto;
     }
 }
-</style>
+
+.panel li {
+    margin: 1rem 0.5rem;
+    text-align: start;
+    font-size: 1.2rem;
+}
+
+.link {
+    color: #fff;
+}
+
+.link:hover {
+    color: #FAF0CA;
+}
+
+.link.router-link-active {
+    color: #FAF0CA;
+}</style>
