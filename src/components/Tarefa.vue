@@ -20,6 +20,9 @@ export default {
                 {{ tarefa.descricao || 'Tarefa sem descrição' }}
             </div>
             <div class="column">
+                {{ tarefa.projeto?.nome  || 'Nenhum projeto vinculado!'}}
+            </div>
+            <div class="column">
                 <Cronometro :tempo-em-segundos="tarefa.duracaoEmSegundos" />
             </div>
         </div>

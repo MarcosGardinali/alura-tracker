@@ -7,7 +7,7 @@ export default {
         alterarTema() {
             this.modoEscuroAtivo = !this.modoEscuroAtivo
             this.$emit('aoTemaAlterado', this.modoEscuroAtivo)
-        }
+        },
     },
     emits: ['aoTemaAlterado'],
     data() {
@@ -28,7 +28,9 @@ export default {
 <template>
     <header>
         <h1>
-            <img src="../assets/logo.png" alt="Logo do Alura-Tracker">
+            <router-link to="/">
+                <img src="../assets/logo.png" alt="Logo do Alura-Tracker" @click="">
+            </router-link>
         </h1>
         <button class="button" @click="alterarTema">
             {{ textoBotao }}
@@ -85,4 +87,5 @@ header {
 
 .link.router-link-active {
     color: #FAF0CA;
-}</style>
+}
+</style>
