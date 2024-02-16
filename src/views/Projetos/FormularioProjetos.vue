@@ -2,7 +2,7 @@
 import notificador from '@/hooks/notificador';
 import { TipoNotificacao } from '@/interfaces/INotificacao';
 import { useStore } from '@/store';
-import { ADICIONA_PROJETO, ALTERA_PROJETO } from '@/store/tipo-mutacoes';
+import { ALTERAR_PROJETO, CADASTRAR_PROJETO } from '@/store/tipo-acoes';
 
 export default {
     props: {
@@ -24,26 +24,29 @@ export default {
     methods: {
         salvar() {
             if (this.id) {
-                this.store.commit(ALTERA_PROJETO, {
+                this.store.dispatch(ALTERAR_PROJETO, {
                     id: this.id,
                     nome: this.nomeDoProjeto
-                })
+                }).then (() => this.lidarComSucesso());
             } else {
-                this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto)
-            }
-            this.notificar(TipoNotificacao.SUCESSO, 'Tudo certo!', `O projeto ${this.nomeDoProjeto} foi adicionado com sucesso!`)
-            this.nomeDoProjeto = ''
-            this.$router.push('/projetos')
-        },
-    },
-    setup() {
-        const store = useStore()
-        const { notificar } = notificador()
-        return {
-            store,
-            notificar
+                this.store.dispatch(CADASTRAR_PROJETO, this.nomeDoProjeto)
+                    .then(() => this.lidarComSucesso())
         }
+    },
+    lidarComSucesso() {
+        this.notificar(TipoNotificacao.SUCESSO, 'Tudo certo!', `O projeto ${this.nomeDoProjeto} foi adicionado com sucesso!`)
+        this.nomeDoProjeto = ''
+        this.$router.push('/projetos')
+        }
+},
+setup() {
+    const store = useStore()
+    const { notificar } = notificador()
+    return {
+        store,
+        notificar
     }
+}
 }
 </script>
 

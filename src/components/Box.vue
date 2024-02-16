@@ -12,5 +12,10 @@ export default {}
 <style scoped>
 .box {
     background-color: #FAF0CA;
+    transition: 0.5s all;
+}
+
+.box:hover{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 </style>

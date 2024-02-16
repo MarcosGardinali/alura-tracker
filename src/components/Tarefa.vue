@@ -7,20 +7,26 @@ import Box from './Box.vue';
 
 export default {
     components: { Cronometro, Box },
+    emits:['aoTarefaClicada'],
     props: {
         tarefa: { type: Object as PropType<ITarefa>, required: true },
-    }
+    },
+    methods: {
+        tarefaClicada(): void {
+            this.$emit('aoTarefaClicada', this.tarefa)
+        }
+    },
 }
 </script>
 
 <template>
     <Box>
-        <div class="columns">
+        <div class="columns clicavel" @click="tarefaClicada">
             <div class="column is-7">
                 {{ tarefa.descricao || 'Tarefa sem descrição' }}
             </div>
             <div class="column">
-                {{ tarefa.projeto?.nome  || 'Nenhum projeto vinculado!'}}
+                {{ tarefa.projeto?.nome || 'Nenhum projeto vinculado!' }}
             </div>
             <div class="column">
                 <Cronometro :tempo-em-segundos="tarefa.duracaoEmSegundos" />
@@ -28,3 +34,9 @@ export default {
         </div>
     </Box>
 </template>
+
+<style scoped>
+.clicavel{
+    cursor: pointer;
+}
+</style>
