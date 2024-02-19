@@ -44,3 +44,8 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Server start
+```sh
+npx json-server db.json
+``````

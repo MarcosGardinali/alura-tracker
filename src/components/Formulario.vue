@@ -2,48 +2,49 @@
 <script lang="ts">
 import { key } from '@/store';
 import Temporizador from './Temporizador.vue';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useStore } from "vuex";
 import { TipoNotificacao } from '@/interfaces/INotificacao';
-import { notificacaoMixin } from '@/mixins/notificar';
 import notificador from '@/hooks/notificador';
 
 export default {
     components: { Temporizador },
-    methods: {
-        finalizarTarefa(tempoDecorrido: number): void {
-            this.$emit('aoSalvarFormulario', {
+    emits: ['aoSalvarFormulario'],
+    setup(props, { emit }) {
+
+        const store = useStore(key)
+
+        const descricao = ref("")
+        const idProjeto = ref("")
+
+        const projetos = computed(() => store.state.projeto.projetos)
+
+        const { notificar } = notificador()
+
+        const finalizarTarefa = (tempoDecorrido: number): void => {
+            emit('aoSalvarFormulario', {
                 duracaoEmSegundos: tempoDecorrido,
-                descricao: this.descricao,
-                projeto: this.projetos.find(proj => proj.id == this.idProjeto),
+                descricao: descricao.value,
+                projeto: projetos.value.find(proj => proj.id == idProjeto.value),
             })
-            this.notificar(TipoNotificacao.SUCESSO, 'Tudo certo!', `A tarefa ${this.descricao} foi adicionado com sucesso!`)
-            if (!this.descricao) {
-                this.notificar(TipoNotificacao.ATENCAO, 'Tarefa sem nome!', `Ops, parece que você adicionou uma tarefa sem nome!`)
+            notificar(TipoNotificacao.SUCESSO, 'Tudo certo!', `A tarefa ${descricao.value} foi adicionado com sucesso!`)
+            if (!descricao.value) {
+                notificar(TipoNotificacao.ATENCAO, 'Tarefa sem nome!', `Ops, parece que você adicionou uma tarefa sem nome!`)
             }
-            const projeto = this.projetos.find((projeto) => projeto.id == this.idProjeto)
+            const projeto = projetos.value.find((projeto) => projeto.id == idProjeto.value)
             if (!projeto) {
-                this.notificar(TipoNotificacao.FALHA, 'Tarefa não adicionada', 'Selecione um projeto para vincular a essa tarefa!')
+                notificar(TipoNotificacao.FALHA, 'Tarefa não adicionada', 'Selecione um projeto para vincular a essa tarefa!')
                 return
             }
-            this.descricao = ''
-            this.idProjeto = ''
+            descricao.value = ''
+            idProjeto.value = ''
         }
-    },
-    data() {
+
         return {
-            descricao: '',
-            idProjeto: ''
-        }
-    },
-    emits: ['aoSalvarFormulario'],
-    setup() {
-        const store = useStore(key)
-        const { notificar } = notificador()
-        return {
-            projetos: computed(() => store.state.projetos),
-            store,
-            notificar
+            projetos,
+            descricao,
+            idProjeto,
+            finalizarTarefa
         }
     }
 }
